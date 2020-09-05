@@ -1,0 +1,86 @@
+// out: ../style.css, compress:true
+
+@import "vars.less";
+
+*{
+    background:transparent;
+    opacity: @opacity;
+}
+
+#main-wrapper{
+    width:auto;
+}
+
+.widget{
+    width:auto;
+}
+
+h1,h2,h3,small{
+    font-weight: 400;
+    color: @main-color;
+    font-family: @main-font;
+    font-size: @title-font-size;
+}
+h2{
+    font-size: @subtitle-font-size;
+}
+h3{
+    font-size:12px;
+}
+small{
+    font-size:9px;
+    &.core-load-percent{
+        display:block;
+        text-align:left;
+        margin-left:5px;
+        width:27px !important;
+    }
+}
+.subtitle{
+    &::after{
+        content: "|";
+        padding:0 4px;
+        color:@main-color;
+    }
+    &:last-child{
+        &::after{
+            content:"";
+        }
+    }
+}
+.cores-container{
+    max-height:65px;
+    display: flex;
+    flex-wrap: wrap;
+}
+.core{
+    display:flex;
+    align-items: center;
+    width:40%;
+    margin-left:10px;
+    & .core_number{
+        display: inline-block;
+        min-width:25px;
+        text-align: right;
+    }
+}
+.load{
+    width:160px;
+    height:10px;
+    border:2px solid @main-color;
+    display:flex;
+    align-items: center;
+    padding:4px;
+    margin-left:5px;
+}
+.load-value{
+    height:100%;
+    border-radius: 2px;
+    background:@main-color;
+}
+*:not(.no-drag){
+    -webkit-app-region: drag;
+}
+.no-drag{
+    -webkit-app-region: no-drag;
+}
