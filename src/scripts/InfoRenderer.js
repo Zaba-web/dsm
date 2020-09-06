@@ -1,9 +1,11 @@
+const byteInGB = 1073741824;
+
 export function renderData(data, query){
     let elementsToHandle = document.getElementsByClassName(query);
     for(let i = 0; i < elementsToHandle.length; i++){
         let element = elementsToHandle[i];
         let neededProperty = element.dataset.value;
-        
+
         let prefix = element.dataset.prefix != undefined ? element.dataset.prefix : "";
         let suffix = element.dataset.suffix != undefined ? element.dataset.suffix : "";
         let value = data[neededProperty];
@@ -54,4 +56,44 @@ export function renderDisplayCount(count, ipc){
             });
         }
     }
+}
+
+export function handleMemoryData(memData, query){
+    
+    let formatedMemoryData = {};
+
+    let size = 0;
+
+    for(let i = 0; i<memData.length; i++){
+        size+= memData[i].size;
+    }
+
+    size = size / byteInGB;
+
+    formatedMemoryData.size = size;
+    formatedMemoryData.type = memData[0].type;
+    formatedMemoryData.voltageConfigured = memData[0].voltageConfigured;
+    formatedMemoryData.clockSpeed = memData[0].clockSpeed;
+
+    if(formatedMemoryData.type == "Unknown")
+        formatedMemoryData.type = "DDR";
+
+    renderData(formatedMemoryData, query);
+}
+
+export function getMemoryUsage(data, query){
+    let totalMemory = data.total / byteInGB;
+    let usedMemory = data.used / byteInGB;
+    let freeMemory = totalMemory - usedMemory;
+
+    let textMemoryData = {
+        free: freeMemory.toFixed(2),
+        total: Math.ceil(totalMemory)
+    }
+
+    let usagePercent = (usedMemory*100)/totalMemory;
+    let ramUsageElement = document.getElementById("ram-usage");
+    ramUsageElement.style.width = Math.floor(usagePercent)+"%";
+
+    renderData(textMemoryData, query);
 }
