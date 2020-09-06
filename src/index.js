@@ -1,5 +1,13 @@
 import { app, BrowserWindow, screen } from 'electron';
 
+function setWindowPosition(){
+  mainWindow.setPosition(activeDisplay.bounds.x + posX, activeDisplay.bounds.y + posY);
+}
+function saveConfigFile(){
+  let configString = JSON.stringify(config);
+  fileSystem.writeFileSync(__dirname+"\\config.json",configString);
+}
+
 const fileSystem = require("fs");
 const {ipcMain} = require('electron');
 
@@ -20,6 +28,7 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 let displays;
+let activeDisplay;
 
 const createWindow = () => {
 
@@ -29,6 +38,7 @@ const createWindow = () => {
     height: height,
     frame: false,
     transparent:true,
+    resizable: false,
     webPreferences:{
       nodeIntegration: true
     }
@@ -78,29 +88,29 @@ app.on('activate', () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
 
+setTimeout(function(){
+  displays = screen.getAllDisplays();
+  activeDisplay = displays[config.display];
+  setWindowPosition();
+},200);
+
 ipcMain.on('adjust-window-size', (event, data) => {
-  if(data.width > config.width || data.height > config.height){
+  if(data.width != config.width || data.height != config.height + 100){
 
     if(data.width > config.width){
-      config.width = data.width;
+        config.width = data.width;
     }
 
-    if(data.height > config.height){
-      config.height = data.height;
+    if(data.height > config.height + 100){
+        config.height = data.height;
     }
 
     let configString = JSON.stringify(config);
-    fileSystem.writeFileSync(__dirname+"\\config.json",configString);
+    saveConfigFile();
 
     mainWindow.setSize(config.width, config.height);
-
   }
 });
-
-setTimeout(function(){
-  mainWindow.setPosition(posX, posY);
-  displays = screen.getAllDisplays();
-},200);
 
 ipcMain.on('set-window-position', (event, data) => {
   let position = mainWindow.getPosition();
@@ -113,7 +123,7 @@ ipcMain.on('set-window-position', (event, data) => {
     config.y = currentPosY;
 
     let configString = JSON.stringify(config);
-    fileSystem.writeFileSync(__dirname+"\\config.json",configString);
+    saveConfigFile();
   }
 });
 
@@ -121,3 +131,10 @@ ipcMain.on('get-displays-count', (event, data) => {
   event.sender.send("display-count", displays.length); 
 })
 
+ipcMain.on('change-display', (event, data) => {
+  activeDisplay = displays[data];
+  setWindowPosition();
+
+  config.display = data;
+  saveConfigFile();
+})
