@@ -1,5 +1,8 @@
 import { app, BrowserWindow, screen } from 'electron';
 
+const nativeImage = require('electron').nativeImage;     
+let image = nativeImage.createEmpty();
+
 function setWindowPosition(){
   mainWindow.setPosition(activeDisplay.bounds.x + posX, activeDisplay.bounds.y + posY);
 }
@@ -39,6 +42,8 @@ const createWindow = () => {
     frame: false,
     transparent:true,
     resizable: false,
+    icon: image,
+    skipTaskbar: true,
     webPreferences:{
       nodeIntegration: true
     }
@@ -48,7 +53,7 @@ const createWindow = () => {
   mainWindow.loadURL(`file://${__dirname}/index.html`);
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools({mode:'undocked'});
+  //mainWindow.webContents.openDevTools({mode:'undocked'});
 
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {
@@ -65,7 +70,7 @@ const createWindow = () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', ()=>{
-  setTimeout(createWindow, 100);
+  setTimeout(createWindow, 10);
 });
 
 // Quit when all windows are closed.
@@ -92,6 +97,7 @@ setTimeout(function(){
   displays = screen.getAllDisplays();
   activeDisplay = displays[config.display];
   setWindowPosition();
+  mainWindow.setSkipTaskbar(true);
 },200);
 
 ipcMain.on('adjust-window-size', (event, data) => {
