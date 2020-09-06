@@ -13,23 +13,24 @@ window.onload = ()=>{
 
     let mainContainer = document.getElementById("main-wrapper");
     
+    const heightOffset = 100; // needed to compensate padding
+
     setTimeout(()=>{
-        ipcRenderer.send("adjust-window-size",{width:mainContainer.offsetWidth, height:mainContainer.offsetHeight+20});
+        ipcRenderer.send("adjust-window-size",{width:mainContainer.offsetWidth, height:mainContainer.offsetHeight+heightOffset});
     },1000)
 
     ipcRenderer.send("get-displays-count");
 
     ipcRenderer.on("display-count", function(e,arg){
-        renderDisplayCount(arg);
+        renderDisplayCount(arg, ipcRenderer);
     });
 
     setInterval(()=>{
         ipcRenderer.send("set-window-position",null);
     },10000);
 
-
-
     systemInfomration.cpu().then(cpuData => renderData(cpuData,"cpu-sysinfo static"));
+    systemInfomration.graphics().then(cpuData => renderData(cpuData,"gpu-sysinfo static"));
     
     setInterval(()=>{
         systemInfomration.currentLoad().then(coreLoading => renderCoreLoading(coreLoading));
