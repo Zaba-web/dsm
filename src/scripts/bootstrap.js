@@ -1,5 +1,5 @@
 import { ipcRenderer } from 'electron';
-import { renderData, renderCoreLoading } from "./scripts/InfoRenderer.js";
+import { renderData, renderCoreLoading, renderDisplayCount } from "./scripts/InfoRenderer.js";
 
 
 let systemInfomration = require("systeminformation");
@@ -12,17 +12,20 @@ window.onload = ()=>{
     style.innerHTML = `*,*::after,*::before{color:${config.color} !important;border-color:${config.color} !important;} .load-value{background:${config.color} !important;}`;
 
     let mainContainer = document.getElementById("main-wrapper");
-    ipcRenderer.send("adjust-window-size",{width:mainContainer.offsetWidth, height:mainContainer.offsetHeight});
+    
+    setTimeout(()=>{
+        ipcRenderer.send("adjust-window-size",{width:mainContainer.offsetWidth, height:mainContainer.offsetHeight+20});
+    },1000)
 
     ipcRenderer.send("get-displays-count");
 
     ipcRenderer.on("display-count", function(e,arg){
-        console.log(arg);
+        renderDisplayCount(arg);
     });
 
-    // setInterval(()=>{
-    //     ipcRenderer.send("set-window-position",null);
-    // },10000);
+    setInterval(()=>{
+        ipcRenderer.send("set-window-position",null);
+    },10000);
 
 
 
