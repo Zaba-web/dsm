@@ -1,5 +1,5 @@
 import { ipcRenderer } from 'electron';
-import { renderData, renderCoreLoading, renderDisplayCount } from "./scripts/InfoRenderer.js";
+import { renderData, renderCoreLoading, renderDisplayCount, handleMemoryData, getMemoryUsage } from "./scripts/InfoRenderer.js";
 
 
 let systemInfomration = require("systeminformation");
@@ -31,9 +31,14 @@ window.onload = ()=>{
 
     systemInfomration.cpu().then(cpuData => renderData(cpuData,"cpu-sysinfo static"));
     systemInfomration.graphics().then(cpuData => renderData(cpuData,"gpu-sysinfo static"));
+    systemInfomration.memLayout().then(memData => handleMemoryData(memData, "mem-sysinfo static"));
     
     setInterval(()=>{
         systemInfomration.currentLoad().then(coreLoading => renderCoreLoading(coreLoading));
+    },500);
+    
+    setInterval(()=>{
+        systemInfomration.mem().then(memUsage => getMemoryUsage(memUsage, "mem-sysinfo dynamic"));
     },500);
     
 }
