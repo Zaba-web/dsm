@@ -30,14 +30,25 @@
           <span class="gpu-sysinfo static" data-sublevel="model" data-value="controllers"></span>
         </h1>
         <h2>
-          <span class="gpu-sysinfo static" data-sublevel="vram" data-value="controllers"></span>
-          <span class="gpu-sysinfo static" data-sublevel="bus" data-value="controllers"></span>
-          <span class="gpu-sysinfo static" data-sublevel="vendor" data-value="controllers"></span>
+          <span class="gpu-sysinfo static subtitle" data-sublevel="vram" data-value="controllers"></span>
+          <span class="gpu-sysinfo static subtitle" data-sublevel="bus" data-value="controllers"></span>
+          <span class="gpu-sysinfo static subtitle" data-sublevel="vendor" data-value="controllers"></span>
         </h2>
       </div>
-    </div>
-    <div class="column">
-      
+      <div class="widget">
+        <h1>
+          <span class="mem-sysinfo static subtitle" data-value="size" data-suffix="GB"></span>
+          <span class="mem-sysinfo static subtitle" data-value="type"></span>
+          <span class="mem-sysinfo static subtitle" data-value="voltageConfigured" data-suffix="V"></span>
+          <span class="mem-sysinfo static subtitle" data-value="clockSpeed" data-prefix="@" data-suffix="MHz"></span>
+        </h1>
+        <h2>
+          <span class="mem-sysinfo dynamic subtitle with-no-line" data-value="free" data-suffix="GB"></span>
+          <span class="subtitle with-no-line"> free of </span>
+          <span class="mem-sysinfo dynamic subtitle with-no-line" data-value="total" data-suffix="GB"></span>
+        </h2>
+        <div class="load" style='width:480px'><div class="load-value" id="ram-usage"></div></div>
+      </div>
     </div>
   </div>
   </body>
