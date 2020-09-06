@@ -34,3 +34,12 @@ export function renderCoreLoading(data){
         }
     }
 }
+
+export function renderDisplayCount(count){
+    if(count > 1){
+        let displayCountContainer = document.getElementById("display-selecter");
+        for(let i = 0; i < count; i++){
+            displayCountContainer.innerHTML = displayCountContainer.innerHTML + `<span class='display h3-like subtitle' title='Pin to the ${i+1} display' data-number='display-${i}'>[D${i+1}]</span>`;
+        }
+    }
+}
