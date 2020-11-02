@@ -59,7 +59,6 @@ export function renderDisplayCount(count, ipc){
 }
 
 export function handleMemoryData(memData, query){
-    
     let formatedMemoryData = {};
 
     let size = 0;
